@@ -1,0 +1,4 @@
+login_page=/html/body/div[2]/div[5]/a
+user_name=/html/body/div[2]/div[2]/form/input[1]
+pwd=/html/body/div[2]/div[2]/form/input[2]
+login_btn=/html/body/div[2]/div[2]/form/input[3]
