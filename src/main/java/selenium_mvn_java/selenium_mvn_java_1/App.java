@@ -58,6 +58,7 @@ public class App
 	public static void logIn(Map<String, String> account_info,String user_path, String pwd_path, String login_btn_path) throws IOException {		
 		List<String> account_info_list = new ArrayList<>();
 		
+//		convert account_map -> account_list; {"admin":"12345"} -> ["admin","12345"]
 		account_info_list.addAll(account_info.keySet());
 		account_info_list.add(account_info.get("admin"));
 		System.out.println(account_info_list);		
