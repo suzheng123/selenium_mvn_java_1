@@ -1,6 +1,5 @@
 package selenium_mvn_java.selenium_mvn_java_1;
 
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -16,7 +15,7 @@ public class App
 {
 	public static WebDriver driver = null;
 	
-	public static WebDriver openBrowser( String baseUrl) {
+	public static WebDriver openBrowser( String baseUrl ) {
 		System.setProperty("webdriver.gecko.driver", "/Users/JacZh/Desktop/resources/selenium_java/webdrivers/geckodriver");
 		driver = new FirefoxDriver();
 		driver.get(baseUrl);
@@ -26,6 +25,13 @@ public class App
 	public static Map<String, String> readFile( String filePath ) throws IOException{
 		Map<String, String> map = GetInfo.generateMap(filePath);
 		return map;
+	}
+	
+	public static void goToPage (String page_name_path) {
+		List<String> x = new ArrayList<>();
+		x.add(page_name_path);
+		List<WebElement> elementPath = locateElement(x);
+		clickBtn(elementPath.get(0));
 	}
 	
 	public static List<WebElement> locateElement ( List<String> elements) {
@@ -45,34 +51,33 @@ public class App
 		}
 	}
 
-	public static void clickBtn( String btn_path) {
-		
+	public static void clickBtn( WebElement btn_path) {
+		btn_path.click();
 	}
 	
-	public static void logIn(List<String> account_info,String user_path, String pwd_path) throws IOException {
+	public static void logIn(List<String> account_info,String user_path, String pwd_path, String login_btn_path) throws IOException {		
 		//fill in log-in info
 		List<String> logInElement = new ArrayList<>();
 		logInElement.add(user_path);
 		logInElement.add(pwd_path);
 		List<WebElement> logIn_fields = locateElement(logInElement);
 		sendKeys(logIn_fields,account_info);
-
+		
+		//click log_in subimit btn
+		List<String> logInBtn = new ArrayList<>();
+		logInBtn.add(login_btn_path);
+		List<WebElement> log_in_btn= locateElement(logInBtn);
+		clickBtn(log_in_btn.get(0));
 	}
 	
-    public static void main( String[] args ) throws IOException {
-//		Map<String, String> account = readFile("src/main/java/files/account_info");
-//		String[] account = ["admin","12345"];
-				
+
+    public static void main( String[] args ) throws IOException {				
     	Map<String, String> map = readFile("src/main/java/files/web_info");
     	List<String> account = Arrays.asList("admin", "12345");
 		driver = openBrowser (map.get("baseUrl"));
 		
-		List<String> x = new ArrayList<>();
-		String loginPage = map.get("login_page");
-		x.add(loginPage);
-		List<WebElement> elementPath = locateElement(x);
-		elementPath.get(0).click();
+		goToPage(map.get("login_page"));
+		logIn(account, map.get("user_name"), map.get("pwd"),map.get("login_btn"));
 		
-		logIn(account, map.get("user_name"), map.get("pwd"));
     }
 }
