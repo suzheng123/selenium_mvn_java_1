@@ -30,8 +30,6 @@ public class App
 	
 	public static List<WebElement> locateElement ( List<String> elements) {
 
-//		System.out.println(driver.getPageSource());
-
 		List<WebElement> elementFields = new ArrayList<>();
 		for (int i = 0; i<elements.size(); i++) {
 			By xpath = By.xpath(elements.get(i));
@@ -41,42 +39,40 @@ public class App
 		return elementFields;
 	}
 
-	public static void sendKeys( List<WebElement> fields, List<String> txt) {
-		for (int i = 0;i<=fields.size();i++){
-			fields.get(i).sendKeys(txt.get(i));
+	public static void sendKeys( List<WebElement> fields, List<String> txtToSend) {
+		for (int i = 0;i<fields.size();i++){
+			fields.get(i).sendKeys(txtToSend.get(i));
 		}
 	}
 
+	public static void clickBtn( String btn_path) {
+		
+	}
 	
-	public static void logIn() throws IOException {
-//		Map<String, String> account = readFile("src/main/java/files/account_info");
-//		String[] account = ["admin","12345"];
-		List<String> account = Arrays.asList("admin", "12345");
-		Map<String, String> map = readFile("src/main/java/files/web_info");
-
-		//click log in
-		List<String> x = new ArrayList<>();
-		String loginPage = map.get("login_page");
-		x.add(loginPage);
-//		List<String> xpaths = new ArrayList<>(map.values());
-		List<WebElement> elementPath = locateElement(x);
-		elementPath.get(0).click();
-
+	public static void logIn(List<String> account_info,String user_path, String pwd_path) throws IOException {
 		//fill in log-in info
 		List<String> logInElement = new ArrayList<>();
-		String user_path = map.get("user_name");
 		logInElement.add(user_path);
-		String pwd_path = map.get("pwd");
 		logInElement.add(pwd_path);
 		List<WebElement> logIn_fields = locateElement(logInElement);
-
-		sendKeys(logIn_fields,account);
+		sendKeys(logIn_fields,account_info);
 
 	}
 	
     public static void main( String[] args ) throws IOException {
-		String baseUrl="http://testing-ground.scraping.pro";
-		driver = openBrowser (baseUrl);
-		logIn();
+//		Map<String, String> account = readFile("src/main/java/files/account_info");
+//		String[] account = ["admin","12345"];
+				
+    	Map<String, String> map = readFile("src/main/java/files/web_info");
+    	List<String> account = Arrays.asList("admin", "12345");
+		driver = openBrowser (map.get("baseUrl"));
+		
+		List<String> x = new ArrayList<>();
+		String loginPage = map.get("login_page");
+		x.add(loginPage);
+		List<WebElement> elementPath = locateElement(x);
+		elementPath.get(0).click();
+		
+		logIn(account, map.get("user_name"), map.get("pwd"));
     }
 }
